@@ -17,7 +17,7 @@ word = wordfile.read()[1:]
 
 
 for file in os.listdir("Fonts/"):
-    if (file.endswith(".ttf")):
+    if (file.endswith(".ttf") or file.endswith(".TTF")):
         if not os.path.exists("test/"+file[0:-4]+ '/'):
             os.makedirs("test/"+file[0:-4]+ '/')
         for x in word:
