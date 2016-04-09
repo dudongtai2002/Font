@@ -19,3 +19,7 @@ for file in os.listdir("Fonts/"):
     dr.text((0,0),chr(0x6c38),font=font)
     name="test/"+file[0:-4]+".png"
     im.save(name)
+
+
+def changes():
+    return
