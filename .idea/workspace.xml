@@ -26,13 +26,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="STCAIYUN..png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/STCAIYUN..png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="STFANGSO..png" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/STFANGSO..png">
           <provider selected="true" editor-type-id="images">
@@ -82,10 +75,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="STZHONGS..png" pinned="false" current-in-tab="true">
+      <file leaf-file-name="STZHONGS..png" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/STZHONGS..png">
           <provider selected="true" editor-type-id="images">
             <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="generate.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/generate.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.43141592" vertical-offset="0" max-vertical-offset="452">
+              <caret line="13" column="45" selection-start-line="13" selection-start-column="45" selection-end-line="13" selection-end-column="45" />
+              <folding>
+                <element signature="e#76#86#0" expanded="true" />
+              </folding>
+            </state>
           </provider>
         </entry>
       </file>
@@ -424,16 +429,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generate.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
-          <caret line="13" column="10" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
-          <folding>
-            <element signature="e#76#86#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/金文大篆体..png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -542,6 +537,16 @@
     <entry file="file://$PROJECT_DIR$/test/STZHONGS..png">
       <provider selected="true" editor-type-id="images">
         <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.43141592" vertical-offset="0" max-vertical-offset="452">
+          <caret line="13" column="45" selection-start-line="13" selection-start-column="45" selection-end-line="13" selection-end-column="45" />
+          <folding>
+            <element signature="e#76#86#0" expanded="true" />
+          </folding>
+        </state>
       </provider>
     </entry>
   </component>
