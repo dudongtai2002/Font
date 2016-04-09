@@ -1,0 +1,15 @@
+list of ttf:
+chfont
+FZSTK
+simfang
+simhei
+simkai
+SIMLI
+simsun
+SIMYOU
+STCAIYUN
+STHUPO
+STLITI
+STXINGKA
+STINWEI
+金文大篆体
