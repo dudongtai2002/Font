@@ -13,7 +13,7 @@ trainsame=10000
 traindifferent=10000
 testnumber=2000
 
-generatedata(imagesize,trainsame,traindifferent,testnumber)
+traininput1,traininput2,testinput1,testinput2,y_train,y_test=generatedata(imagesize,trainsame,traindifferent,testnumber)
 
 # 1 bias term is added to all inputs
 # more layers could be added and their sizes can be changed

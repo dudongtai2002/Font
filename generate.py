@@ -68,22 +68,47 @@ def generatedata(imagesize,trainsame,traindifferent,testnumber):
             img.save("originaltrain.png")  #for testing
         traininput1[:,i]=np.array(img).flatten()
         y_train[i]=1
-    for i in range(trainsame,trainsame+traindifferent-1):   #generate the same data
+    for i in range(trainsame,trainsame+traindifferent-1):   #generate the different data
         tempfont=fonts[i%len(fonts)]
         font=ImageFont.truetype("Fonts/"+tempfont,50)
-        fonts1=random.choice
-        while (fonts==font):
-            fonts1=random.choice
+
+        tempfont1=random.choice(fonts)
+        while (tempfont1==tempfont):
+            tempfont1=random.choice(fonts)
+        font1=ImageFont.truetype("Fonts/"+tempfont1,50)
 
         im=Image.new("L",(50,50),"WHITE")
         draw=ImageDraw.Draw(im)
         draw.text((0,0),letters[i%len(letters)],(0),font=font)
         traininput2[:,i]=np.array(im).flatten()
+
         img=Image.new("L",(50,50),"WHITE")
         draw=ImageDraw.Draw(img)
-        draw.text((0,0),"永",(0),font=font)
+        draw.text((0,0),"永",(0),font=font1)
         traininput1[:,i]=np.array(img).flatten()
-        y_train[i]=1
+        y_train[i]=0
+    random.shuffle(letters)
+    for i in range(0,testnumber-1):
+        font=ImageFont.truetype("Fonts/"+random.choice(fonts),50)
+        font1=ImageFont.truetype("Fonts/"+random.choice(fonts),50)
+        if(font==font1):
+            y_test[i]=1
+        else: y_test[i]=0
+
+        im=Image.new("L",(50,50),"WHITE")
+        img=Image.new("L",(50,50),"WHITE")
+        draw=ImageDraw.Draw(im)
+        draw1=ImageDraw.Draw(img)
+        draw.text((0,0),letters[i%len(letters)],(0),font=font)
+        draw1.text((0,0),"永",(0),font=font1)
+        testinput1[:,i]=np.array(img).flatten()
+        testinput2[:,i]=np.array(im).flatten()
+    return(traininput1,traininput2,testinput1,testinput2,y_train,y_test)
+
+
+
+
+
 
 
 """
