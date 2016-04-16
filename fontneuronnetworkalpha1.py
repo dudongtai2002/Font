@@ -5,7 +5,7 @@ import json
 import numpy as n
 import random as r
 import math as ma
-
+import generate
 from generate import *
 # 1 bias term is add into all input
 imagesize=50
@@ -17,7 +17,7 @@ traininput1,traininput2,testinput1,testinput2,y_train,y_test=generatedata(images
 
 # 1 bias term is added to all inputs
 # more layers could be added and their sizes can be changed
-
+"""
 inputsize = 49*49
 lay1size = 100
 lay2size = 100
@@ -51,3 +51,4 @@ def propagate(input, w, b):
 def activation(x):
     return 1/(1+ma.exp(x))
 activation = n.vectorize(activation)
+"""

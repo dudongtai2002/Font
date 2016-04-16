@@ -4,7 +4,7 @@ __author__ = 'dudongtai'
 This file is used to generate characters.
 """
 
-__author__ = 'Dongtai Du'&'zhifan yin'
+__author__ = 'Dongtai Du & zhifan yin'
 import json
 import PIL
 from PIL import ImageFont
@@ -15,7 +15,7 @@ from os.path import basename
 import numpy as np
 import random
 
-
+"""
 wordfile = open('test/ChineseCharacter.txt')
 word = wordfile.read()[1:]
 
@@ -33,7 +33,7 @@ for file in os.listdir("Fonts/"):
             name="test/"+file[0:-4]+ '/' + x + ".png"
             im.save(name)
 
-
+"""
 
 
 
@@ -51,24 +51,23 @@ def generatedata(imagesize,trainsame,traindifferent,testnumber):
     random.shuffle(letters)
     fonts=[]
     for file in os.listdir("Fonts/"):
-        fonts.append(file)
-    for i in range(0,trainsame-1):   #generate the same data
+        if (file.endswith(".ttf") or file.endswith(".TTF")):
+            fonts.append(file)
+    for i in range(0,trainsame):   #generate the same data
         tempfont=fonts[i%len(fonts)]
         font=ImageFont.truetype("Fonts/"+tempfont,50)
         im=Image.new("L",(50,50),"WHITE")
         draw=ImageDraw.Draw(im)
         draw.text((0,0),letters[i%len(letters)],(0),font=font)
-        if(i==100):
-            im.save("trainsame.png")    #for testing
+           #for testing
         traininput2[:,i]=np.array(im).flatten()
         img=Image.new("L",(50,50),"WHITE")
         draw=ImageDraw.Draw(img)
         draw.text((0,0),"永",(0),font=font)
-        if(i==100):
-            img.save("originaltrain.png")  #for testing
+
         traininput1[:,i]=np.array(img).flatten()
         y_train[i]=1
-    for i in range(trainsame,trainsame+traindifferent-1):   #generate the different data
+    for i in range(trainsame,trainsame+traindifferent):   #generate the different data
         tempfont=fonts[i%len(fonts)]
         font=ImageFont.truetype("Fonts/"+tempfont,50)
 
@@ -81,14 +80,17 @@ def generatedata(imagesize,trainsame,traindifferent,testnumber):
         draw=ImageDraw.Draw(im)
         draw.text((0,0),letters[i%len(letters)],(0),font=font)
         traininput2[:,i]=np.array(im).flatten()
-
+        if(i==10500):
+            im.save("trainsame.png")
         img=Image.new("L",(50,50),"WHITE")
         draw=ImageDraw.Draw(img)
         draw.text((0,0),"永",(0),font=font1)
+        if(i==10500):
+            img.save("originaltrain1.png")  #for testing
         traininput1[:,i]=np.array(img).flatten()
         y_train[i]=0
     random.shuffle(letters)
-    for i in range(0,testnumber-1):
+    for i in range(0,testnumber):
         font=ImageFont.truetype("Fonts/"+random.choice(fonts),50)
         font1=ImageFont.truetype("Fonts/"+random.choice(fonts),50)
         if(font==font1):
