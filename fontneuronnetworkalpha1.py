@@ -5,6 +5,7 @@ import json
 import numpy as n
 import random as r
 import math as ma
+
 from generate import *
 # 1 bias term is add into all input
 imagesize=50
@@ -14,16 +15,26 @@ testnumber=2000
 
 generatedata(imagesize,trainsame,traindifferent,testnumber)
 
+# 1 bias term is added to all inputs
+# more layers could be added and their sizes can be changed
+
 inputsize = 49*49
 lay1size = 100
 lay2size = 100
-inputsize += 1
-w1 = n.matrix([[r.uniform(0,0.01) for i in range(inputsize)] for x in range(lay1size)])
-b1 = n.matrix([[r.uniform(0,0.01)] for i in range(inputsize)])
+lay3size = 100
+lay4size = 100
 
+size = [inputsize, lay1size, lay2size, lay3size, lay4size, inputsize]
+lsize = len(size)
+
+w = [0] * lsize
+b = [0] * lsize
+
+for j in range(lsize - 1):
+    w[j] = n.matrix([[r.uniform(0,0.01) for i in range(size[j] + 1)] for x in range(size[j+1])])
+    b[j] = n.matrix([[r.uniform(0,0.01)] for i in range(size[j] + 1)])
 
 def xtoy(input, wi, bi):
-
     return wi * input + bi
 
 
@@ -40,5 +51,3 @@ def propagate(input, w, b):
 def activation(x):
     return 1/(1+ma.exp(x))
 activation = n.vectorize(activation)
-
-
