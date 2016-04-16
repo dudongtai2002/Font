@@ -1,12 +1,18 @@
 # Neural network for font gen,
 # potential of using Class
 
-
+import json
 import numpy as n
 import random as r
 import math as ma
-
+from generate import *
 # 1 bias term is add into all input
+imagesize=50
+trainsame=10000
+traindifferent=10000
+testnumber=2000
+
+generatedata(imagesize,trainsame,traindifferent,testnumber)
 
 inputsize = 49*49
 lay1size = 100
