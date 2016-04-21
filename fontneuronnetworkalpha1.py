@@ -10,22 +10,28 @@ from generate import *
 from NeuralNets import *
 # 1 bias term is add into all input
 imagesize=50
-trainsame=10000
-traindifferent=10000
+trainsame=1000
+traindifferent=1000
 testnumber=2000
 batch_size=50
-n_batch=200
 n_epochs = 1
-n_train_batches = 210
+n_train_batches = 20
 
 traininput1,traininput2,testinput1,testinput2,y_train,y_test=generatedata(imagesize,trainsame,traindifferent,testnumber)
 
 traininput1=traininput1.transpose()
 traininput2=traininput2.transpose()
+
+traininput1=traininput1.reshape((trainsame,imagesize))
+traininput2=traininput2.reshape((traindifferent,imagesize))
+
+
 testinput1=testinput1.transpose()
 testinput2=testinput2.transpose()
+
+
 trainInput1,trainInput2,y_Train  = shared_dataset(traininput1, traininput2, y_train)
-testInput1,testInput2,y_Test  = shared_dataset(testinput1, testinput2, y_test)
+#testInput1,testInput2,y_Test  = shared_dataset(testinput1, testinput2, y_test)
 
 #y_train(y_train=np.zeros(trainsame+traindifferent))
 #traininput1=np.zeros(transpose(imagesize*imagesize,trainsame+traindifferent))
@@ -35,7 +41,7 @@ learning_rate=1
 index = T.lscalar()  # index to a [mini]batch
 x1 = T.matrix('x1')
 x2 = T.matrix('x2')
-y = T.imatrix('y')
+y = T.ivector('y')
 
 # 1 bias term is added to all inputs
 # more layers could be added and their sizes can be changed
@@ -164,10 +170,10 @@ train_model = theano.function(
         givens={
             x1: trainInput1[index * batch_size: (index + 1) * batch_size],
             x2: trainInput2[index * batch_size: (index + 1) * batch_size],
-            y: y_train[index * batch_size: (index + 1) * batch_size]
+            y: y_Train[index * batch_size: (index + 1) * batch_size]
         }
     )
-
+epoch=0
 
 while (epoch < n_epochs):
     epoch = epoch + 1
