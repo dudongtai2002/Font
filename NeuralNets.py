@@ -27,7 +27,7 @@ class BinaryLogisticRegression(object):
         :type n_outs: list of int 
         :param n_outs: number of output units in each group 
 
-        """ 
+        """
         self.n_groups = n_out 
         # initialize with 0 the weights W as a matrix of shape (n_in, n_out) 
         self.W = theano.shared(

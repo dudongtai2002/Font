@@ -9,26 +9,26 @@ import generate
 from generate import *
 from NeuralNets import *
 # 1 bias term is add into all input
-imagesize=50
+imagesize=36
 trainsame=1000
 traindifferent=1000
 testnumber=2000
 batch_size=50
 n_epochs = 1
-n_train_batches = 20
+n_train_batches = 40
 
 traininput1,traininput2,testinput1,testinput2,y_train,y_test=generatedata(imagesize,trainsame,traindifferent,testnumber)
 
 traininput1=traininput1.transpose()
 traininput2=traininput2.transpose()
+"""
+traininput1=traininput1.reshape((trainsame+traindifferent,imagesize))
+traininput2=traininput2.reshape((traindifferent+traindifferent,imagesize))
+"""
 
-traininput1=traininput1.reshape((trainsame,imagesize))
-traininput2=traininput2.reshape((traindifferent,imagesize))
-
-
-testinput1=testinput1.transpose()
-testinput2=testinput2.transpose()
-
+testinput1=testinput1.transpose()  #2000*1296(36^2)
+testinput2=testinput2.transpose()  #2000*1296(36^2)
+y_train=y_train.reshape(trainsame+trainsame,1)
 
 trainInput1,trainInput2,y_Train  = shared_dataset(traininput1, traininput2, y_train)
 #testInput1,testInput2,y_Test  = shared_dataset(testinput1, testinput2, y_test)
@@ -36,12 +36,14 @@ trainInput1,trainInput2,y_Train  = shared_dataset(traininput1, traininput2, y_tr
 #y_train(y_train=np.zeros(trainsame+traindifferent))
 #traininput1=np.zeros(transpose(imagesize*imagesize,trainsame+traindifferent))
 learning_rate=1
+#trainInput1/2,testinput1/2:2000*1296
+#y_train,y_test:2000
 
 
 index = T.lscalar()  # index to a [mini]batch
 x1 = T.matrix('x1')
 x2 = T.matrix('x2')
-y = T.ivector('y')
+y = T.imatrix('y')
 
 # 1 bias term is added to all inputs
 # more layers could be added and their sizes can be changed
@@ -54,11 +56,11 @@ x2->layer010->layer110(3*3->3*3)
 
 
 """
-layer00_input=x1.reshape((batch_size,1,imagesize,imagesize))
+layer00_input=x1.reshape((batch_size,1,imagesize,imagesize))  #50,1,36,36
 layer01_input=x2.reshape((batch_size,1,imagesize,imagesize))
 
-# first layer, 50-3+1=48, 48/2=24;
-#50-5+1=46,46/2=23
+# first layer, 36-3+1=34, 34/2=17;
+#36-5+1=32,32/2=16
 
 layer000 = LeNetConvPoolLayer(
         np.random.RandomState(np.random.randint(10000)),
@@ -72,7 +74,7 @@ layer001 = LeNetConvPoolLayer(
         np.random.RandomState(np.random.randint(10000)),
         input=layer00_input,
         image_shape=(batch_size, 1, imagesize, imagesize),   # input image shape
-        filter_shape=(1, 1, 4, 4),
+        filter_shape=(1, 1, 5, 5),
         poolsize=(2, 2)
     )
 
@@ -88,35 +90,35 @@ layer011 = LeNetConvPoolLayer(
         np.random.RandomState(np.random.randint(10000)),
         input=layer01_input,
         image_shape=(batch_size, 1, imagesize, imagesize),   # input image shape
-        filter_shape=(1, 1, 4, 4),
+        filter_shape=(1, 1, 5, 5),
         poolsize=(2, 2)
     )
-#second layer, 24-3+1=22 ,22/2=11, 23-3+1=21,21/2=10?11,lets take it as 11
+#second layer, 17-3+1=15 ,15/2=?, 16-3+1=14,14/2=7
 layer100 = LeNetConvPoolLayer(
         np.random.RandomState(np.random.randint(10000)),
         input=layer000.output,
-        image_shape=(batch_size, 1, 24, 24),
+        image_shape=(batch_size, 1, 17, 17),
         filter_shape=(1, 1, 3, 3),
         poolsize=(2, 2)
     )
 layer101 = LeNetConvPoolLayer(
         np.random.RandomState(np.random.randint(10000)),
         input=layer001.output,
-        image_shape=(batch_size, 1, 23, 23),
+        image_shape=(batch_size, 1, 16, 16),
         filter_shape=(1, 1, 3, 3),
         poolsize=(2, 2)
     )
 layer110 = LeNetConvPoolLayer(
         np.random.RandomState(np.random.randint(10000)),
         input=layer010.output,
-        image_shape=(batch_size, 1, 24, 24),
+        image_shape=(batch_size, 1, 17, 17),
         filter_shape=(1, 1, 3, 3),
         poolsize=(2, 2)
     )
 layer111 = LeNetConvPoolLayer(
         np.random.RandomState(np.random.randint(10000)),
         input=layer011.output,
-        image_shape=(batch_size, 1, 23, 23),
+        image_shape=(batch_size, 1, 16, 16),
         filter_shape=(1, 1, 3, 3),
         poolsize=(2, 2)
     )
@@ -128,7 +130,7 @@ layer2_input = T.concatenate([layer100.output.flatten(2), layer101.output.flatte
 layer2 = HiddenLayer(
         np.random.RandomState(np.random.randint(10000)),
         input=layer2_input,
-        n_in=4*11*11,
+        n_in=4*7*7,
         n_out=50,
         activation=T.nnet.sigmoid
     )
@@ -149,7 +151,6 @@ layer4 = BinaryLogisticRegression(
 
 cost = layer4.negative_log_likelihood(y)
 error = ((y - layer4.y_pred)**2).sum()
-
 params = (layer4.params
         + layer3.params
         + layer2.params
@@ -163,13 +164,14 @@ updates = [
     ]
 
 
+
 train_model = theano.function(
         inputs = [index],
         outputs = cost,
         updates=updates,
         givens={
-            x1: trainInput1[index * batch_size: (index + 1) * batch_size],
-            x2: trainInput2[index * batch_size: (index + 1) * batch_size],
+            x1: trainInput1[index * batch_size: (index + 1) * batch_size],    #50*1296
+            x2: trainInput2[index * batch_size: (index + 1) * batch_size],    #50*1296
             y: y_Train[index * batch_size: (index + 1) * batch_size]
         }
     )
@@ -193,11 +195,20 @@ predict_model = theano.function(
 
 predicted_values = predict_model(testinput1[0:50],testinput2[0:50])
 
+f=open('output.txt','w+')
+f.write(np.array_str(predicted_values))
+f.close()
+
+f1=open('real.txt','w+')
+f1.write(np.array_str(y_test[0:50]))
+f1.close()
+"""
+
 data = {'generate':predicted_values, 'testing':y_test[0:50]}
 with open('output.json', 'w') as outfile:
         json.dump(data, outfile)
 
-
+"""
 """
 inputsize = 49*49
 lay1size = 100
@@ -207,7 +218,7 @@ lay4size = 100
 
 size = [inputsize, lay1size, lay2size, lay3size, lay4size, inputsize]
 lsize = len(size)
-
+-
 w = [0] * lsize
 b = [0] * lsize
 

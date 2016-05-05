@@ -57,13 +57,13 @@ def generatedata(imagesize,trainsame,traindifferent,testnumber):
             fonts.append(file)
     for i in range(0,trainsame):   #generate the same data
         tempfont=fonts[i%len(fonts)]
-        font=ImageFont.truetype("Fonts/"+tempfont,50)
-        im=Image.new("L",(50,50),"WHITE")
+        font=ImageFont.truetype("Fonts/"+tempfont,36)
+        im=Image.new("L",(36,36),"WHITE")
         draw=ImageDraw.Draw(im)
         draw.text((0,0),letters[i%len(letters)],(0),font=font)
            #for testing
         traininput2[:,i]=np.array(im).flatten()
-        img=Image.new("L",(50,50),"WHITE")
+        img=Image.new("L",(36,36),"WHITE")
         draw=ImageDraw.Draw(img)
         draw.text((0,0),"永",(0),font=font)
 
@@ -71,20 +71,20 @@ def generatedata(imagesize,trainsame,traindifferent,testnumber):
         y_train[i]=1
     for i in range(trainsame,trainsame+traindifferent):   #generate the different data
         tempfont=fonts[i%len(fonts)]
-        font=ImageFont.truetype("Fonts/"+tempfont,50)
+        font=ImageFont.truetype("Fonts/"+tempfont,36)
 
         tempfont1=random.choice(fonts)
         while (tempfont1==tempfont):
             tempfont1=random.choice(fonts)
-        font1=ImageFont.truetype("Fonts/"+tempfont1,50)
+        font1=ImageFont.truetype("Fonts/"+tempfont1,36)
 
-        im=Image.new("L",(50,50),"WHITE")
+        im=Image.new("L",(36,36),"WHITE")
         draw=ImageDraw.Draw(im)
         draw.text((0,0),letters[i%len(letters)],(0),font=font)
         traininput2[:,i]=np.array(im).flatten()
         if(i==10500):
             im.save("trainsame.png")
-        img=Image.new("L",(50,50),"WHITE")
+        img=Image.new("L",(36,36),"WHITE")
         draw=ImageDraw.Draw(img)
         draw.text((0,0),"永",(0),font=font1)
         if(i==10500):
@@ -93,14 +93,18 @@ def generatedata(imagesize,trainsame,traindifferent,testnumber):
         y_train[i]=0
     random.shuffle(letters)
     for i in range(0,testnumber):
-        font=ImageFont.truetype("Fonts/"+random.choice(fonts),50)
-        font1=ImageFont.truetype("Fonts/"+random.choice(fonts),50)
-        if(font==font1):
+        if(random.choice([True,False])):
+            font=ImageFont.truetype("Fonts/"+random.choice(fonts),36)
+            font1=ImageFont.truetype("Fonts/"+random.choice(fonts),36)
+            if(font==font1):
+                y_test[i]=1
+            else: y_test[i]=0
+        else:
+            font=ImageFont.truetype("Fonts/"+random.choice(fonts),36)
+            font1=font
             y_test[i]=1
-        else: y_test[i]=0
-
-        im=Image.new("L",(50,50),"WHITE")
-        img=Image.new("L",(50,50),"WHITE")
+        im=Image.new("L",(36,36),"WHITE")
+        img=Image.new("L",(36,36),"WHITE")
         draw=ImageDraw.Draw(im)
         draw1=ImageDraw.Draw(img)
         draw.text((0,0),letters[i%len(letters)],(0),font=font)
